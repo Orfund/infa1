@@ -18,6 +18,7 @@ private:
 public:
     typedef int(*ordrel)(obj,obj);
     typedef int(*eqrel)(obj,obj);
+    typedef int(*sigma)(int);
     int length;
     List(int n = 1){
         length = n;
@@ -41,11 +42,20 @@ public:
         else
             throw("Index out of bounds");
     }
+    
     int Find(obj O, eqrel F=[](obj a, obj b)->int{return a ==b;}){
         for(int i = 0;i<length;i++)
             if(F(Objects[i],O)==1)
                 return i;
         return -1;
+    }
+    
+    List Reshuffle(sigma s){ //sigma must be biective
+        List<obj> list = List<obj>(length);
+        list = *this;
+        for(int i = 0; i<length; i++)
+            list[s(i)] = Objects[i];
+        return list;
     }
     
     void Append(obj O){
