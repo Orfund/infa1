@@ -64,6 +64,17 @@ public:
         length++;
     }
     
+    void Remove(int i){
+        if (i<0 || i >=length)
+            throw "Out of bounds";
+        else{
+            for(int j = i+1;j<length;j++)
+                Objects[j-1] = Objects[j];
+            length--;
+        }
+           
+    }
+    
     void Sort(ordrel f){
         int j,k,i;
         obj buf;
