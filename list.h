@@ -26,13 +26,14 @@ public:
     typedef int(*sigma)(int);
     typedef void(*mfun)(obj);
     typedef obj(*mfun_)(obj);
+    typedef obj(*mfun_p)(obj, void*param);
     
     int Length(){
         return length;
     }
     
     void SetLength(int n){
-        if(n>0 && n<=__mem_res)
+        if(n>=0 && n<=__mem_res)
         length = n;
     }
     
@@ -68,6 +69,16 @@ public:
             if(F(Objects[i],O)==1)
                 return i;
         return -1;
+    }
+    
+    void Fill(int num, obj &T){
+        if(__mem_res<num){
+            __mem_res = num;
+            Rloc();
+            length = num;
+        }
+        for(int i = 0; i<length; i++)
+            Objects[i] = T;
     }
     
     List Reshuffle(sigma s){ //sigma must be biective
@@ -148,16 +159,17 @@ public:
             fun(Objects[i]);
     }
     
+    void Map(mfun_p fun, void*ptr){
+        for(int i = 0; i<length;i++)
+            Objects[i] = fun(Objects[i], ptr);
+    }
+   
     void Map(mfun_ fun){
         for(int i = 0; i<length;i++)
             Objects[i] = fun(Objects[i]);
     }
-   
-    
     
 };
-
-
 
 
 #endif /* list_h */
