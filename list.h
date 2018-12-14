@@ -9,6 +9,7 @@
 #ifndef list_h
 #define list_h
 #include<stdlib.h>
+#include<iostream>
 enum order {ASC=1, DESC=-1};
 template <typename obj>
 class List{
@@ -23,9 +24,16 @@ public:
     typedef int(*ordrel)(obj,obj);
     typedef int(*eqrel)(obj,obj);
     typedef int(*sigma)(int);
+    typedef void(*mfun)(obj);
+    typedef obj(*mfun_)(obj);
     
     int Length(){
         return length;
+    }
+    
+    void SetLength(int n){
+        if(n>0 && n<=__mem_res)
+        length = n;
     }
     
     List(int n = 1){
@@ -80,6 +88,16 @@ public:
         length++;
     }
     
+    void Append(List &l){
+        if(__mem_res<length+l.Length()){
+            __mem_res = length+l.Length();
+            Rloc();
+        }
+        for(int i = length; i<length+l.Length();i++)
+            Objects[i] = l[i-length];
+        length+=l.Length();
+    }
+    
     void Remove(int i){
         if (i<0 || i >=length)
             throw "Out of bounds";
@@ -103,6 +121,8 @@ public:
     }
     
     
+    
+    
     void Sort(ordrel f){
         int j,k,i;
         obj buf;
@@ -123,6 +143,15 @@ public:
 
     }
     
+    void Map(mfun fun){
+        for(int i = 0; i< length;i++)
+            fun(Objects[i]);
+    }
+    
+    void Map(mfun_ fun){
+        for(int i = 0; i<length;i++)
+            Objects[i] = fun(Objects[i]);
+    }
    
     
     
