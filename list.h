@@ -26,6 +26,7 @@ public:
     typedef int(*sigma)(int);
     typedef void(*mfun)(obj);
     typedef obj(*mfun_)(obj);
+    typedef void(*mapfun)(obj,void*);
     typedef obj(*mfun_p)(obj, void*param);
     
     int Length(){
@@ -162,6 +163,11 @@ public:
     void Map(mfun_p fun, void*ptr){
         for(int i = 0; i<length;i++)
             Objects[i] = fun(Objects[i], ptr);
+    }
+    
+    void Map(mapfun fun, void*ptr){
+        for(int i = 0; i<length;i++)
+            fun(Objects[i], ptr);
     }
    
     void Map(mfun_ fun){
