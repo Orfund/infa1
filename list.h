@@ -10,7 +10,6 @@
 #define list_h
 #include<stdlib.h>
 #include<iostream>
-enum order {ASC=1, DESC=-1};
 template <typename obj>
 class List{
 private:
@@ -21,13 +20,15 @@ private:
         Objects = (obj*)realloc(Objects,(__mem_res)*sizeof(obj));
     }
 public:
-    typedef int(*ordrel)(obj,obj);
-    typedef int(*eqrel)(obj,obj);
+    typedef int(*ordrel)(obj&,obj&);
+    typedef int(*eqrel)(obj&,obj&);
     typedef int(*sigma)(int);
-    typedef void(*mfun)(obj);
-    typedef obj(*mfun_)(obj);
-    typedef void(*mapfun)(obj,void*);
-    typedef obj(*mfun_p)(obj, void*param);
+    typedef void(*mfun)(obj&);
+    typedef obj(*mfun_)(obj&);
+    typedef void(*mapfun)(obj&,void*);
+    typedef obj(*mfun_p)(obj&, void*param);
+    
+    
     
     int Length(){
         return length;
@@ -65,7 +66,7 @@ public:
             throw("Index out of bounds");
     }
     
-    int Find(obj O, eqrel F=[](obj a, obj b)->int{return a ==b;}){
+    int Find(obj &O, eqrel F=[](obj &a, obj &b)->int{return a ==b;}){
         for(int i = 0;i<length;i++)
             if(F(Objects[i],O)==1)
                 return i;
@@ -90,7 +91,7 @@ public:
         return list;
     }
     
-    void Append(obj O){
+    void Append(obj &O){
         if(length==__mem_res){
              __mem_res<<=1;
             Rloc();
@@ -117,7 +118,7 @@ public:
             for(int j = i+1;j<length;j++)
                 Objects[j-1] = Objects[j];
             length--;
-            if(length<=__mem_res>>1){
+            if(length<=(__mem_res>>1)){
                 __mem_res >>=1;
                 Rloc();
                 
