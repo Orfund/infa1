@@ -9,7 +9,7 @@
 #ifndef list_h
 #define list_h
 #include<stdlib.h>
-#include<iostream>
+
 template <typename obj>
 class List{
 private:
@@ -20,6 +20,7 @@ private:
         Objects = (obj*)realloc(Objects,(__mem_res)*sizeof(obj));
     }
 public:
+    const int typeflag = 13;
     typedef int(*ordrel)(obj&,obj&);
     typedef int(*eqrel)(obj&,obj&);
     typedef int(*sigma)(int);
