@@ -5,11 +5,10 @@
 //  Created by Дмитрий Маслюков on 11/12/2018.
 //  Copyright © 2018 Дмитрий Маслюков. All rights reserved.
 //
-
 #ifndef list_h
 #define list_h
-#include<stdlib.h>
 
+#include<stdlib.h>
 template <typename obj>
 class List{
 private:
@@ -180,4 +179,5 @@ public:
 };
 
 
-#endif /* list_h */
+
+#endif

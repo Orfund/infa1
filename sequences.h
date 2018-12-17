@@ -5,10 +5,8 @@
 //  Created by Дмитрий Маслюков on 17/12/2018.
 //  Copyright © 2018 Дмитрий Маслюков. All rights reserved.
 //
-
 #ifndef sequences_h
 #define sequences_h
-
 class container{
 private:
     void*ptr;
@@ -19,6 +17,10 @@ public:
     }
     void set(void*exptr){
         ptr = exptr;
+    }
+    
+    void operator=(void*pointer){
+        ptr = pointer;
     }
 };
 
@@ -66,8 +68,15 @@ public:
             Objects[i] = f(Objects[i], arg);
     }
     
+    template<typename obj>
+    bool check(container& cont){
+        for(int i = 0; i< last;i++)
+            if(Objects[i].get<obj>()==cont.get<obj>())
+                return true;
+        return false;
+    }
     
 };
 
 
-#endif /* sequences_h */
+#endif
