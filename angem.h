@@ -140,6 +140,53 @@ void sort(vector*V, int num, skalar f, int dir = 1){
 
 
 
+typedef struct line{
+private:
+    double a;
+    double b;
+    double c;
+    
+public:
+    double operator[](int ind){
+        if(ind%3==0)
+            return a;
+        if(ind%3 ==1)
+            return b;
+        else
+            return c;
+    }
+    line(double ai = 0, double bi = 0, double ci = 0){
+        a = ai;
+        b = bi;
+        c = ci;
+    }
+    line(vector v1, vector v2){
+        a = v2[Y]-v1[Y];
+        b = v1[X]- v2[X];
+        c = v1[Y]*v2[X]-v2[Y]*v1[X];
+    }
+    void move(vector&v){
+        c-=v[Y]*b+v[X]*a;
+    }
+    
+    vector ort(double len){
+        vector v = vector(a,b);
+        v = v*(1/v.length())*len;
+        return v;
+    }
+}line;
+
+vector linecross(line& lin1, line& lin2){
+    if(lin1[0]*lin2[1]-lin2[0]*lin1[1]==0)
+        throw "non crossing";
+    else{
+        double x, y;
+        double ndet = lin1[0]*lin2[1] - lin1[1]*lin2[0];
+        x = -1*(lin1[2]*lin2[1]-lin2[2]*lin1[1])/ndet;
+        y = -1*(lin1[0]*lin2[2]-lin2[0]*lin1[2])/ndet;
+        return vector(x,y);
+    }
+}
 
 
 #endif /* ANGEM_H_ */
