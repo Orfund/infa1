@@ -109,6 +109,9 @@ public:
     
 };
 
+
+
+
 template<typename F>
 class vect:public lvect<F>{
 public:
@@ -129,6 +132,37 @@ public:
         this->check_ind(ind);
         this->_Move(ind+1, ind, (--this->length-ind));
     }
+    class iterator{
+    private:
+        bool cyclic;
+        size_t curind;
+        vect*ptr;
+    public:
+        iterator( vect&v,size_t curin = 0, bool cycli = false){
+            curind = curin;
+            ptr = &v;
+            cyclic = cycli;
+        }
+        F&get(){
+            return ptr->elems[curind%(ptr->Length())];
+        }
+        void operator++(){
+            if(cyclic)
+                curind = (curind+1)%ptr->length;
+            else
+                if(ptr->Length()>=curind)
+                    curind++;
+        }
+        size_t pos(){
+            return curind;
+        }
+        bool active(){
+            return cyclic || (curind < ptr->Length());
+        }
+        void reset(size_t ind = 0){
+            curind = ind%(ptr->Length());
+        }
+    };
 };
 
 
@@ -162,6 +196,7 @@ public:
         Elements.Map([](lvect<F>&lv, void*ptr){lv.Resize(*(int*)ptr);},&col_n);
     }
     ~matrix(){
+        
         //delete Elements;
     }
     matrix _get(int bannedrn, int*bannedrows, int bannedcln, int*bannedcols){
@@ -258,4 +293,6 @@ public:
     
     
 };
+
+
 #endif /* matrix_h */
