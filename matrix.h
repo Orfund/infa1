@@ -18,13 +18,13 @@ protected:
     void RLOC(){
         elems = (T*)realloc(elems, size*sizeof(T));
     }
-    void check_ind(int index){
+    void check_ind(size_t index){
         if(index<0)
             index+=length;
         if(index<0 || index>length)
             throw "bad bounds";
     }
-    void _Move(int startind, int endind, int num){
+    void _Move(size_t startind, size_t endind, size_t num){
         memmove((elems+endind),(elems+startind),num*sizeof(T));
     }
     typedef T (*mfun)(T&, void*);
@@ -32,18 +32,25 @@ protected:
     
 public:
     void Resize(size_t newsize){
-        size = newsize;
+        
         length = newsize;
-        elems = (T*)realloc(elems,sizeof(T)*newsize);
+        if(length>size){
+            size = newsize;
+            elems = (T*)realloc(elems,sizeof(T)*newsize);
+        }
+        
     }
-    int Length(){
+    size_t Length(){
         return length;
+    }
+    T*getelems(){
+        return elems;
     }
     lvect(size_t siz=1){
         size = siz;
         length = siz;
         elems = (T*)malloc(sizeof(T)*size);
-        //std::cout<<size;
+        //std::cout<<length;
         for(int i = 0; i<size;i++)
                 new (&elems[i])T();
         
@@ -63,8 +70,9 @@ public:
             RLOC();
         }
         length = v.Length();
-        for(int i = 0; i<length;i++)
-            memcpy(elems+i,&(v[i]),sizeof(v[i]));
+        memcpy(elems,v.getelems(),length*sizeof(T*));
+        /*for(int i = 0; i<length;i++)
+            memcpy(elems+i,&(v[i]),sizeof(v[i]));*/
     }
     void set(int num, T*objects){
         if(num>size){
@@ -87,7 +95,7 @@ public:
         length++;
     }
     
-    lvect Map(mfun f, void*ptr = NULL){
+    void Map(mfun f,void*ptr = NULL){
         for(int i = 0; i<length;i++)
             elems[i] = f(elems[i],ptr);
     }
@@ -117,8 +125,8 @@ public:
         this->length++;
     }
     
-    void Remove(int ind){
-        this->check_ind(index);
+    void Remove(size_t ind){
+        this->check_ind(ind);
         this->_Move(ind+1, ind, (--this->length-ind));
     }
 };
