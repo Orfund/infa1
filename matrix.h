@@ -133,6 +133,12 @@ private:
     int rows;
     lvect<lvect<F>> Elements;
 public:
+    int getColn(){
+        return cols;
+    }
+    int getRown(){
+        return rows;
+    }
     matrix(int row_n, int col_n ,lvect<lvect<F>> &elems){
         
         cols = col_n;
@@ -205,6 +211,43 @@ public:
             return elem;
         }
     }
+    
+    matrix operator+(matrix&m1){
+        if(m1.getColn() != cols || m1.getRown()!=rows)
+            throw "dimens not equal";
+        matrix m = matrix(rows,cols);
+        for(int i = 0; i<rows; i++){
+            for(int j = 0; j<cols;j++)
+                m[i][j] = Elements[i][j]+m1[i][j];
+        }
+        return m;
+    }
+    void operator=(matrix m2){
+        if(m2.getColn() != cols || m2.getRown()!=rows)
+            throw "dimens not equal";
+        for(int i = 0; i<rows; i++){
+            for(int j = 0; j<cols;j++)
+                 Elements[i][j]=m2[i][j];
+        }
+    }
+    matrix operator*(matrix&m1){
+        if(m1.getRown() != cols)
+            throw "dimens not equal";
+        matrix m = matrix(rows,m1.getColn());
+        
+        for(int i = 0; i<rows;i++){
+            for(int j = 0; j<m1.getColn();j++){
+                F elem = F();
+                for(int k = 0; k<cols;k++)
+                    elem = elem+Elements[i][k]*m1[k][j];
+                m[i][j] = elem;
+                
+            }
+        }
+        return m;
+    }
+    
+    
     
 };
 #endif /* matrix_h */
