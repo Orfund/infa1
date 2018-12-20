@@ -8,9 +8,12 @@
 
 #ifndef collections_h
 #define collections_h
-#include"list.h"
-#include"sequences.h"
-#include"dict.h"
-
-class container; //defined in sequences.h
+//#include"list.h"
+#include<stdlib.h>
+//#include"sequences.h"
+//#include"dict.h"
+#include"matrix.h"
+#include"Comparer.h"
+class container;
+//defined in sequences.h
 #endif /* collections_h */

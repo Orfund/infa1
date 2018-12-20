@@ -8,7 +8,11 @@
 
 #ifndef vector_h
 #define vector_h
-#include"collections.h"
+#include"Comparer.h"
+
+
+
+
 template<typename T>
 class lvect{
 protected:
@@ -40,6 +44,7 @@ public:
         }
         
     }
+    
     size_t Length(){
         return length;
     }
@@ -61,6 +66,10 @@ public:
         free(elems);
     }
     T& operator[](int ind){
+        check_ind(ind);
+        return elems[ind];
+    }
+    virtual const T&get(size_t ind){
         check_ind(ind);
         return elems[ind];
     }
@@ -152,6 +161,43 @@ public:
         }
     };
     
+    void Sort(Comparer<T> &comp){
+        T buf;
+        int i,j;
+        for(int k = length/2; k > 0; k /=2)
+            for(i = k; i < length; i++)
+            {
+                buf = elems[i];
+                for(j = i; j>=k; j-=k)
+                {
+                    if(comp.compare(buf,elems[j-k])==1)
+                        elems[j] = elems[j-k];
+                    else
+                        break;
+                }
+                elems[j] = buf;
+            }
+
+    }
+    void Sort(int dir = 1){
+        T buf;
+        int i,j;
+        for(int k = length/2; k > 0; k /=2)
+            for(i = k; i < length; i++)
+            {
+                buf = elems[i];
+                for(j = i; j>=k; j-=k)
+                {
+                    if(dir*buf<dir*elems[j-k])
+                        elems[j] = elems[j-k];
+                    else
+                        break;
+                }
+                elems[j] = buf;
+            }
+        
+    }
+    
 };
 
 
@@ -191,7 +237,14 @@ public:
         
     };
     
+    F&get(size_t ind)override{
+        this->check_ind(ind);
+        return (*this)[ind];
+    }
+    
 };
+
+
 
 
 #endif /* vector_h */
