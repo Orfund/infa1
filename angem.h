@@ -15,6 +15,7 @@
 struct vector;
 typedef struct vector vector;
 typedef double (*skalar)(vector v);
+//typedef double (vector::*param)();
 const char rpattern[] = "%lf%lf";
 const char pattern1[] = "%lf %lf\n";
 const char pattern2[] = "%d %d\n";
@@ -35,8 +36,24 @@ private:
 			x = fx;
 			y = fy;
 		}
+		/*
+		vector(vector&Other){
+			x = Other.x;
+			y = Other.y;
+		}
+		
+		vector(vector&&Other){
+			std::swap(x, Other.x);
+			std::swap(y, Other.y);
+		}
+		
+		vector& operator=(vector&&Other){
+			std::swap(x, Other.x);
+			std::swap(y, Other.y);
+		}
+		*/
 
-		double getx(){
+		double getx(){ //double& ?
 			return x;
 		}
 		double gety(){
@@ -47,7 +64,7 @@ private:
 			return sqrt(x*x+y*y);
 		}
 
-		double operator[](int n){
+		double operator[](int n){ //double&
 			n = n%2;
 			if(n == 0)
 				return x;
@@ -56,14 +73,14 @@ private:
 		}
 
 
-		vector operator=(vector v){
+		vector operator=(vector v){ //vector&
 			this->x = v.x;
 			this->y = v.y;
 			return *this;
 		}
 
 		vector operator*(double d){
-			return vector(d*x,d*y);
+			return vector(d*x,d*y); //std::move()
 		}
 
 		double operator*(vector v){
@@ -71,7 +88,7 @@ private:
 		}
 
 		vector operator+(vector v){
-			return vector(x + v.getx(),y + v.gety());
+			return vector(x + v.getx(),y + v.gety()); //std::move()
 		}
 
 		vector operator-(vector v){
